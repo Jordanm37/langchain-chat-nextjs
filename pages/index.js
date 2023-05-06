@@ -154,7 +154,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Aristotle AI Chat</title>
+        <title>Website AI Chat</title>
         <meta name="description" content="Aristotle AI tutor chatbot" />
         <script>
           {`
