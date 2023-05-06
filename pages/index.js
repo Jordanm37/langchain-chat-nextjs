@@ -70,7 +70,7 @@ export default function Home() {
           },
           { content: combinedUserInput, role: "user" },
         ],
-        chatId: "neptune-ai-yowf8ox0d",
+        chatId: "i-pdf-o6xnn3z4s",
         stream: true,
         model: "gpt-3.5-turbo",
       }),
