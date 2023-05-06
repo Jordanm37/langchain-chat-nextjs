@@ -1,0 +1,34 @@
+Folder PATH listing
+Volume serial number is 3EEA-DE92
+C:.
+�   .gitignore
+�   folder_structure.txt
+�   LICENSE
+�   next.config.js
+�   package-lock.json
+�   package.json
+�   README.md
+�   
+����.next
+�   �   build-manifest.json
+�   �   package.json
+�   �   react-loadable-manifest.json
+�   �   trace
+�                 
+����pages
+�   �   index.js
+�   �   _app.js
+�   �   _document.js
+�   �   
+�   ����api
+�           chat.js
+�           
+����public
+�       favicon.ico
+�       parroticon.png
+�       usericon.png
+�       
+����styles
+        globals.css
+        Home.module.css
+        

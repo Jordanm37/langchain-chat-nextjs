@@ -26,20 +26,19 @@ export default function Home() {
     }
   };
 
+  // Auto scroll chat to bottom
   useEffect(() => {
     const messageList = messageListRef.current;
     messageList.scrollTop = messageList.scrollHeight;
   }, [messages]);
 
+  // Focus on text field on load
   useEffect(() => {
     textAreaRef.current.focus();
   }, []);
 
-  const handleError = () => {
-    setLoading(false);
-    alert("An error occurred. Please try again.");
-  };
-
+  // Handle errors
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -53,9 +52,7 @@ export default function Home() {
       { message: userInput, type: "userMessage" },
     ]);
 
-    // Add the extra message to the user input
-    const combinedUserInput = userInput;
-
+    // Send user question and history to API
     const response = await fetch("https://www.chatbase.co/api/v1/chat", {
       method: "POST",
       headers: {
@@ -68,7 +65,7 @@ export default function Home() {
             content: history[history.length - 1]?.[0] ?? "How can I help you?",
             role: "assistant",
           },
-          { content: combinedUserInput, role: "user" },
+          { content: userInput, role: "user" },
         ],
         chatId: "neptune-ai-yowf8ox0d",
         stream: true,
@@ -76,6 +73,7 @@ export default function Home() {
       }),
     });
 
+    // Get the stream from the response
     const data = response.body;
 
     if (!response.ok) {
@@ -87,6 +85,7 @@ export default function Home() {
       return;
     }
 
+    // Process the stream
     const reader = data.getReader();
     const decoder = new TextDecoder();
     let done = false;
@@ -97,27 +96,32 @@ export default function Home() {
       done = doneReading;
       const chunkValue = decoder.decode(value);
 
+      // Check if the chunkValue indicates the end of the stream
       if (chunkValue.trim() === "[DONE]") {
         break;
       }
 
+      // Add the chunkValue to the chatbotResponse
       chatbotResponse += chunkValue;
+
+      // Add a delay between chunks to simulate streaming
       await new Promise((resolve) => setTimeout(resolve, 50));
     }
 
+    // Reset user input
     setUserInput("");
 
+    // Update messages with the chatbot's complete response
     setMessages((prevMessages) => [
       ...prevMessages,
       { message: chatbotResponse, type: "apiMessage" },
     ]);
-
+    // Call renderMath only for the final API message
+    renderMath();
     setLoading(false);
 
-    // Call renderMath after setting the new message
-    setTimeout(renderMath, 0);
   };
-
+  // Prevent blank submissions and allow for multiline input
   const handleEnter = (e) => {
     if (e.key === "Enter" && userInput) {
       if (!e.shiftKey && userInput) {
@@ -127,17 +131,6 @@ export default function Home() {
       e.preventDefault();
     }
   };
-
-  useEffect(() => {
-    if (messages.length >= 3) {
-      setHistory([
-        [
-          messages[messages.length - 2].message,
-          messages[messages.length - 1].message,
-        ],
-      ]);
-    }
-  }, [messages]);
 
   // Keep history in sync with messages
   useEffect(() => {
@@ -182,7 +175,7 @@ export default function Home() {
 
       <div className={styles.topnav}>
         <div className={styles.navlogo}>
-          <a href="/">Website AI</a>
+          <a href="/">Aristotle AI</a>
         </div>
         <div className={styles.navlinks}>
           <a href="https://langchain.readthedocs.io/en/latest/" target="_blank">
